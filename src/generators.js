@@ -115,11 +115,11 @@ var getTransitonValues = function(tuple,state,alphabet){
 }
 
 var generateTupleForDfa = function(tuple,states,tupleForDfa){
+	tupleForDfa.setOfStates = getStates(states);
+	tupleForDfa.finalStates = getFinalStates(states,tuple.finalStates);
 	tupleForDfa.startState = getEpsilonStates(tuple.transitionFunction,[tuple.startState]).sort(sortByAsc()).join('');
 	tupleForDfa.transitionFunction = getTransitionTableForDfa(tuple,{},states);
-	tupleForDfa.finalStates = getFinalStates(states,tuple.finalStates);
 	tupleForDfa.alphabetSet = tuple.alphabetSet;
-	tupleForDfa.setOfStates = getStates(states);
 	return tupleForDfa;
 }
 
