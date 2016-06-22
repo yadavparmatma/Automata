@@ -58,13 +58,13 @@ automata.nfaToDfa = function(tuple){
 }
 
 var getTupleForDfa = function(tuple){
-		var states = getAllStates(sortStates(tuple.setOfStates));
+		var states = getAllStates(tuple.setOfStates.sort(sortByAsc()));
 		return generateTupleForDfa(tuple,states,{});
 }
 
 var getTransitionTableForDfa = function(tuple,transitionTableForDfa,states){
 	_.forEach(states,function(state){
-		var sortedState = sortStates(state).join('');
+		var sortedState = state.sort(sortByAsc()).join('');
 		transitionTableForDfa[sortedState] = generateTransitionTable(tuple,transitionTableForDfa,state,{});
 	});
 	return  transitionTableForDfa;
@@ -103,7 +103,7 @@ var generateTransitionTable = function(tuple,transitionTableForDfa,states,transi
 		var values = _.map(states,function(state){
 			return getTransitonValues(tuple,state,alphabet);
 		});
-		transitions[alphabet] = sortStates(values).join('');
+		transitions[alphabet] = _.uniq(_.flattenDeep(values)).sort(sortByAsc()).join('');
 	})
 	return transitions;
 }
@@ -115,7 +115,7 @@ var getTransitonValues = function(tuple,state,alphabet){
 }
 
 var generateTupleForDfa = function(tuple,states,tupleForDfa){
-	tupleForDfa.startState = sortStates(getEpsilonStates(tuple.transitionFunction,[tuple.startState])).join('');
+	tupleForDfa.startState = getEpsilonStates(tuple.transitionFunction,[tuple.startState]).sort(sortByAsc()).join('');
 	tupleForDfa.transitionFunction = getTransitionTableForDfa(tuple,{},states);
 	tupleForDfa.finalStates = getFinalStates(states,tuple.finalStates);
 	tupleForDfa.alphabetSet = tuple.alphabetSet;
@@ -123,8 +123,8 @@ var generateTupleForDfa = function(tuple,states,tupleForDfa){
 	return tupleForDfa;
 }
 
-var sortStates = function(states){
-	return _.uniq(_.flattenDeep(states)).sort(function(x,y){
+var sortByAsc = function(){
+	return function(x,y){
 		return x.length - y.length | x > y;
-	});
+	};
 }

@@ -12,8 +12,6 @@
   },
   "dependencies": {
     "chai": "^3.5.0",
-    "combinations-js": "^1.1.2",
-    "js-combinatorics": "^0.5.2",
     "lodash": "^4.13.1",
     "mocha": "^2.5.3"
   }
