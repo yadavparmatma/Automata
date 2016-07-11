@@ -76,20 +76,17 @@ var getStates = function(states){
 	})
 }
 
-var getAllStates = function (setOfState) {
-    var setOfStatesForDfa = [];
-    for( var state = 1; state < 1<<setOfState.length; ++state ) {
-      var newState = setOfState.filter(stateFilter(state));
-    	setOfStatesForDfa.push(newState);
-    }
-    return setOfStatesForDfa;
+
+var getAllStates = function(states){
+  return _.reduce(states, reducer, [[]]);
 }
 
-var stateFilter = function(stateIndex){
-	return function(state,index){
-		return stateIndex>>index & 1;
-	}
-}
+var reducer = function(resultSet, element) {
+    return _.map(resultSet, function(state){
+        return state.concat(element);
+    }).concat(resultSet);
+};
+
 
 var getFinalStates = function(allStates,finalStates){
 	var finalState = _.filter(allStates,function(state){
